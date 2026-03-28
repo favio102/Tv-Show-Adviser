@@ -8,17 +8,18 @@ export function TVShowListItem({ tvShow, onClick }) {
     onClick(tvShow)
   }
   return (
-    <div onClick={onClick_} className={s.container}>
+    <button onClick={onClick_} className={s.container} type="button">
       <img
         className={s.img}
         src={SMALL_IMG_COVER_BASE_URL + tvShow.backdrop_path}
         alt={tvShow.name}
+        loading="lazy"
       />
-      <div className={s.title}>
+      <span className={s.title}>
         {tvShow.name.length > MAX_TITLE_CHAR
           ? tvShow.name.slice(0, MAX_TITLE_CHAR) + "..."
           : tvShow.name}
-      </div>
-    </div>
+      </span>
+    </button>
   );
 }

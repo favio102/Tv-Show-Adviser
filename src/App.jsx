@@ -80,7 +80,7 @@ function App() {
   }
 
   return (
-    <div
+    <main
       className={s.main_container}
       style={{
         background: currentTVShow
@@ -89,29 +89,29 @@ function App() {
           : "black",
       }}
     >
-      <div className={s.header}>
+      <header className={s.header}>
         <div className={s.header_logo}>
           <Logo img={logoImg} title="OnWatch" subtitle="The TV Shows" />
         </div>
         <div className={s.header_search}>
           <SearchBar onSubmit={fetchByTitle} />
         </div>
-        <div className={s.header_lang}>
+        <nav className={s.header_lang} aria-label="Language selection">
           <LanguageSelector value={language} onChange={setLanguage} />
-        </div>
-      </div>
-      <div className={s.tv_show_details}>
+        </nav>
+      </header>
+      <section className={s.tv_show_details} aria-live="polite">
         {currentTVShow && <TVShowDetail tvShow={currentTVShow} />}
-      </div>
-      <div className={s.recommended_shows}>
+      </section>
+      <section className={s.recommended_shows}>
         {currentTVShow && (
           <TVShowList
             onClickItem={updateCurrentTVShow}
             tvShowList={recommendationList}
           />
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 

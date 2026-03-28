@@ -4,6 +4,7 @@
   font-size: 35px;
   letter-spacing: 1px;
   text-transform: uppercase;
+  margin: 0;
 }
 .rating {
   margin-left: 5px;
@@ -22,5 +23,5 @@
   font-size: 20px;
   height: 120px;
   overflow-y: hidden;
-  margin-top: 10px;
+  margin: 10px 0 0;
 }

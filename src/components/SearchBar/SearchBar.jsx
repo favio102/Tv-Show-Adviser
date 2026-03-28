@@ -16,8 +16,10 @@ export function SearchBar({ onSubmit }) {
   }
   return (
     <>
-      <SearchIcon size={27} className={s.icon} />
+      <SearchIcon size={27} className={s.icon} aria-hidden="true" />
+      <label htmlFor="tv-search" className={s.sr_only}>Search TV shows</label>
       <input
+        id="tv-search"
         onKeyUp={submit}
         onChange={handleChange}
         className={s.input}

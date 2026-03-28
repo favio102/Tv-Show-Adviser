@@ -18,6 +18,7 @@ export function LanguageSelector({ value, onChange }) {
           key={lang.code}
           className={`${s.btn} ${value === lang.code ? s.active : ""}`}
           onClick={() => onChange(lang.code)}
+          aria-current={value === lang.code ? true : undefined}
         >
           {lang.label}
         </button>

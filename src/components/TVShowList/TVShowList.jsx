@@ -42,7 +42,7 @@ export function TVShowList({ tvShowList, onClickItem }) {
 
   return (
     <div>
-      <div className={s.title}>You will probably like:</div>
+      <h2 className={s.title}>You will probably like:</h2>
       <div className={s.wrapper}>
         <div
           ref={containerRef}

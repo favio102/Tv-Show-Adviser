@@ -4,10 +4,10 @@ export function Logo({ title, subtitle, img }) {
   return (
     <div>
       <div className={s.container}>
-        <img src={img} alt="logo" className={s.img} />
-        <div className={s.title}>{title}</div>
+        <img src={img} alt="OnWatch - TV Show Adviser" className={s.img} />
+        <span className={s.title}>{title}</span>
       </div>
-      <div className={s.subtitle}>{subtitle}</div>
+      <span className={s.subtitle}>{subtitle}</span>
     </div>
   );
 }
