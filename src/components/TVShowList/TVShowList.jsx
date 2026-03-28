@@ -1,8 +1,9 @@
 import { useRef, useEffect } from "react";
 import { TVShowListItem } from "../TVShowListItem/TVShowListItem";
+import { t } from "../../utils/translations";
 import s from "./style.module.css";
 
-export function TVShowList({ tvShowList, onClickItem }) {
+export function TVShowList({ tvShowList, onClickItem, language }) {
   const containerRef = useRef(null);
   const trackRef = useRef(null);
   const isPaused = useRef(false);
@@ -42,7 +43,7 @@ export function TVShowList({ tvShowList, onClickItem }) {
 
   return (
     <div>
-      <h2 className={s.title}>You will probably like:</h2>
+      <h2 className={s.title}>{t(language, "youWillLike")}</h2>
       <div className={s.wrapper}>
         <div
           ref={containerRef}

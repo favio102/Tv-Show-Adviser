@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { FiveStarRating } from "../FiveStarRating/FiveStarRating";
 import { fetchData, youtubeOptions } from "../../utils/fetchData";
+import { t } from "../../utils/translations";
 import s from "./style.module.css";
 
-export function TVShowDetail({ tvShow }) {
+export function TVShowDetail({ tvShow, language }) {
   const rating = tvShow.vote_average / 2;
   const [showTrailer, setShowTrailer] = useState(false);
   const [trailers, setTrailers] = useState([]);
@@ -63,7 +64,7 @@ export function TVShowDetail({ tvShow }) {
         type="button"
         onClick={openTrailer}
       >
-        Watch Trailer
+        {t(language, "watchTrailer")}
       </button>
 
       {showTrailer && (
@@ -79,7 +80,7 @@ export function TVShowDetail({ tvShow }) {
             </button>
 
             {loading && (
-              <p className={s.modal_placeholder}>Loading trailers...</p>
+              <p className={s.modal_placeholder}>{t(language, "loadingTrailers")}</p>
             )}
 
             {error && (

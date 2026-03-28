@@ -94,20 +94,21 @@ function App() {
           <Logo img={logoImg} title="OnWatch" subtitle="The TV Shows" />
         </div>
         <div className={s.header_search}>
-          <SearchBar onSubmit={fetchByTitle} />
+          <SearchBar onSubmit={fetchByTitle} language={language} />
         </div>
         <nav className={s.header_lang} aria-label="Language selection">
           <LanguageSelector value={language} onChange={setLanguage} />
         </nav>
       </header>
       <section className={s.tv_show_details} aria-live="polite">
-        {currentTVShow && <TVShowDetail tvShow={currentTVShow} />}
+        {currentTVShow && <TVShowDetail tvShow={currentTVShow} language={language} />}
       </section>
       <section className={s.recommended_shows}>
         {currentTVShow && (
           <TVShowList
             onClickItem={updateCurrentTVShow}
             tvShowList={recommendationList}
+            language={language}
           />
         )}
       </section>
