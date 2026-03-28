@@ -25,3 +25,71 @@
   overflow-y: hidden;
   margin: 10px 0 0;
 }
+
+.trailer_btn {
+  margin-top: 12px;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  font-family: "Lato", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.trailer_btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: white;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  border: none;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modal_content {
+  position: relative;
+  background: #111;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal_close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal_close:hover {
+  opacity: 0.7;
+}
+
+.modal_placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Lato", sans-serif;
+  font-size: 18px;
+}
