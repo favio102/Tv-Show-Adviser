@@ -5,9 +5,12 @@ import { useState } from "react";
 export function SearchBar({ onSubmit }) {
   const [value, setValue] = useState("");
   function submit(e) {
-    if (e.key === "Enter" && e.target.value.trim() !== "") {
-      onSubmit(e.target.value);
-      setValue("");
+    if (e.key === "Enter") {
+      const trimmed = e.target.value.trim();
+      if (trimmed.length > 0 && trimmed.length <= 100) {
+        onSubmit(trimmed);
+        setValue("");
+      }
     }
   }
 
