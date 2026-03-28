@@ -1,21 +1,57 @@
 .main_container {
-    background-color: black;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 25px;
-
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
 }
 
 .header {
-    flex: 2;
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-.tv_show {
-    flex:4;
+/* mobile: logo left, lang right, search full-width below */
+.header_logo {
+  order: 1;
+  flex: 1;
+}
+
+.header_lang {
+  order: 2;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header_search {
+  order: 3;
+  width: 100%;
+}
+
+/* desktop: logo | search | lang in one row */
+@media (min-width: 992px) {
+  .header_search {
+    order: 2;
+    flex: 1;
+    max-width: 500px;
+    width: auto;
+  }
+
+  .header_lang {
+    order: 3;
+    flex: 1;
+  }
+}
+
+.tv_show_details {
+  flex: 1;
 }
 
 .recommended_shows {
-    flex:2;
-    -color: rgb(88, 69, 69);
+  flex: 2;
+  -color: rgb(88, 69, 69);
 }

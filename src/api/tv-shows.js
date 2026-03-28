@@ -5,11 +5,11 @@ const APIKey = process.env.REACT_APP_API_KEY;
 const APIToken = process.env.REACT_APP_TOKEN;
 
 export class TVShowAPI {
-  static async fetchPopulars() {
+  static async fetchPopulars(language = "en-US") {
     const options = {
       method: "GET",
       url: "https://api.themoviedb.org/3/tv/popular",
-      params: { language: "en-US", page: "1", api_key: APIKey },
+      params: { language, page: "1", api_key: APIKey },
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${APIToken}`,
@@ -25,11 +25,11 @@ export class TVShowAPI {
     // return FAKE_POPULARS;
   }
 
-  static async fetchRecommendations(tvShowId) {
+  static async fetchRecommendations(tvShowId, language = "en-US") {
     const options = {
       method: "GET",
       url: `https://api.themoviedb.org/3/tv/${tvShowId}/recommendations`,
-      params: { language: "en-US", page: "1", api_key: APIKey },
+      params: { language, page: "1", api_key: APIKey },
       headers: {
         accept: "application/json",
         Authorization: `Bearer ${APIToken}`,
@@ -46,14 +46,32 @@ export class TVShowAPI {
     // return FAKE_RECOMMENDATION;
   }
 
-  static async fetchByTitle(title) {
+  static async fetchById(tvShowId, language = "en-US") {
+    const options = {
+      method: "GET",
+      url: `https://api.themoviedb.org/3/tv/${tvShowId}`,
+      params: { language, api_key: APIKey },
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${APIToken}`,
+      },
+    };
+    try {
+      const response = await axios.request(options);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  static async fetchByTitle(title, language = "en-US") {
     const options = {
       method: "GET",
       url: "https://api.themoviedb.org/3/search/tv",
       params: {
         query: title,
         include_adult: "false",
-        language: "en-US",
+        language,
         page: "1",
       },
       headers: {

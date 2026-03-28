@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TVShowAPI } from "./api/tv-shows";
 import s from "./style.module.css";
 import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
@@ -6,34 +6,65 @@ import { Logo } from "./components/Logo/Logo";
 import logoImg from "./assets/images/clapperboard.png";
 import { TVShowList } from "./components/TVShowList/TVShowList";
 import { SearchBar } from "./components/SearchBar/SearchBar";
+import { LanguageSelector } from "./components/LanguageSelector/LanguageSelector";
+
 const BACKDROPBASE_URL = "https://image.tmdb.org/t/p/original";
 
 function App() {
   const [currentTVShow, setCurrentTVShow] = useState();
   const [recommendationList, setRecommendationList] = useState([]);
+  const [language, setLanguage] = useState("en-US");
+  const currentShowIdRef = useRef(null);
 
+  // initial load only
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    fetchPopulars();
+    fetchPopulars("en-US");
   }, []);
-  // console.log(currentTVShow);
 
+  // language changed: re-fetch the same show in the new language
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (currentShowIdRef.current) {
+      refreshCurrentShow(currentShowIdRef.current, language);
+    }
+  }, [language]);
+
+  // show changed: track its id and fetch recommendations
   useEffect(() => {
     if (currentTVShow) {
-      fetchRecommendations(currentTVShow.id);
+      currentShowIdRef.current = currentTVShow.id;
+      fetchRecommendations(currentTVShow.id, language);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTVShow]);
-  // console.log(recommendationList);
 
-  async function fetchPopulars() {
-    const popularTVShowList = await TVShowAPI.fetchPopulars();
+  async function withOverviewFallback(tvShow, lang) {
+    if (tvShow.overview || lang === "en-US") return tvShow;
+    const enShow = await TVShowAPI.fetchById(tvShow.id, "en-US");
+    return { ...tvShow, overview: enShow?.overview ?? "" };
+  }
+
+  async function fetchPopulars(lang) {
+    const popularTVShowList = await TVShowAPI.fetchPopulars(lang);
     if (popularTVShowList.length > 0) {
-      setCurrentTVShow(popularTVShowList[0]);
+      const show = await withOverviewFallback(popularTVShowList[0], lang);
+      setCurrentTVShow(show);
     }
   }
 
-  async function fetchRecommendations(tvShowId) {
+  async function refreshCurrentShow(tvShowId, lang) {
+    const tvShow = await TVShowAPI.fetchById(tvShowId, lang);
+    if (tvShow) {
+      const show = await withOverviewFallback(tvShow, lang);
+      setCurrentTVShow(show);
+    }
+  }
+
+  async function fetchRecommendations(tvShowId, lang) {
     const recommendationListResp = await TVShowAPI.fetchRecommendations(
-      tvShowId
+      tvShowId,
+      lang,
     );
     if (recommendationListResp.length > 0) {
       setRecommendationList(recommendationListResp.slice(0, 10));
@@ -45,7 +76,7 @@ function App() {
   }
 
   async function fetchByTitle(title) {
-    const searchResponse = await TVShowAPI.fetchByTitle(title);
+    const searchResponse = await TVShowAPI.fetchByTitle(title, language);
     if (searchResponse.length > 0) {
       setCurrentTVShow(searchResponse[0]);
     }
@@ -62,13 +93,14 @@ function App() {
       }}
     >
       <div className={s.header}>
-        <div className="row">
-          <div className="col-4">
-            <Logo img={logoImg} title="OnWatch" subtitle="The TV Shows" />
-          </div>
-          <div className="col-md-12 col-lg-4">
-            <SearchBar onSubmit={fetchByTitle} />
-          </div>
+        <div className={s.header_logo}>
+          <Logo img={logoImg} title="OnWatch" subtitle="The TV Shows" />
+        </div>
+        <div className={s.header_search}>
+          <SearchBar onSubmit={fetchByTitle} />
+        </div>
+        <div className={s.header_lang}>
+          <LanguageSelector value={language} onChange={setLanguage} />
         </div>
       </div>
       <div className={s.tv_show_details}>
