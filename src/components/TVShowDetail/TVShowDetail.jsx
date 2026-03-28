@@ -1,12 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { FiveStarRating } from "../FiveStarRating/FiveStarRating";
+import { fetchData, youtubeOptions } from "../../utils/fetchData";
 import s from "./style.module.css";
 
 export function TVShowDetail({ tvShow }) {
   const rating = tvShow.vote_average / 2;
   const [showTrailer, setShowTrailer] = useState(false);
+  const [trailers, setTrailers] = useState([]);
+  const [activeVideo, setActiveVideo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const closeTrailer = useCallback(() => setShowTrailer(false), []);
+  const closeTrailer = useCallback(() => {
+    setShowTrailer(false);
+    setActiveVideo(null);
+  }, []);
 
   useEffect(() => {
     if (!showTrailer) return;
@@ -16,6 +24,31 @@ export function TVShowDetail({ tvShow }) {
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
   }, [showTrailer, closeTrailer]);
+
+  async function openTrailer() {
+    setShowTrailer(true);
+    setLoading(true);
+    setError(null);
+    try {
+      const query = encodeURIComponent(`${tvShow.name} official trailer`);
+      const data = await fetchData(
+        `https://youtube-search-and-download.p.rapidapi.com/search?query=${query}`,
+        youtubeOptions
+      );
+      const videos = (data.contents || [])
+        .filter((item) => item.video)
+        .map((item) => item.video)
+        .slice(0, 5);
+      setTrailers(videos);
+      if (videos.length > 0) {
+        setActiveVideo(videos[0]);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <article>
@@ -28,7 +61,7 @@ export function TVShowDetail({ tvShow }) {
       <button
         className={s.trailer_btn}
         type="button"
-        onClick={() => setShowTrailer(true)}
+        onClick={openTrailer}
       >
         Watch Trailer
       </button>
@@ -44,7 +77,48 @@ export function TVShowDetail({ tvShow }) {
             >
               &times;
             </button>
-            <p className={s.modal_placeholder}>Trailer for {tvShow.name}</p>
+
+            {loading && (
+              <p className={s.modal_placeholder}>Loading trailers...</p>
+            )}
+
+            {error && (
+              <p className={s.modal_placeholder}>Error: {error}</p>
+            )}
+
+            {activeVideo && (
+              <iframe
+                className={s.video_player}
+                src={`https://www.youtube.com/embed/${activeVideo.videoId}?autoplay=1&rel=0`}
+                title={activeVideo.title}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            )}
+
+            {trailers.length > 1 && (
+              <div className={s.trailer_list}>
+                {trailers.map((video) => (
+                  <button
+                    key={video.videoId}
+                    type="button"
+                    className={`${s.trailer_card} ${activeVideo?.videoId === video.videoId ? s.trailer_card_active : ""}`}
+                    onClick={() => setActiveVideo(video)}
+                  >
+                    <img
+                      src={video.thumbnails?.[0]?.url}
+                      alt={video.title}
+                      className={s.trailer_thumb}
+                    />
+                    <span className={s.trailer_card_title}>
+                      {video.title?.length > 50
+                        ? video.title.slice(0, 50) + "..."
+                        : video.title}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </dialog>
       )}
