@@ -1,6 +1,9 @@
 .title {
-  font-weight: 400;
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
   font-size: 35px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 .rating {
   margin-left: 5px;
@@ -14,11 +17,10 @@
   overflow-y: auto;
 }
 .overview {
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-family: "Lato", sans-serif;
   font-weight: 400;
   font-size: 20px;
   height: 120px;
   overflow-y: hidden;
   margin-top: 10px;
-
 }
